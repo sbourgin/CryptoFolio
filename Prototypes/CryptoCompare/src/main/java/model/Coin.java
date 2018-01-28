@@ -40,6 +40,4 @@ public class Coin {
      */
     @SerializedName("CoinName")
     public String coinName;
-
-    public Coin() {}
 }

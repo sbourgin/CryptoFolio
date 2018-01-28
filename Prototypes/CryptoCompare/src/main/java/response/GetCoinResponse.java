@@ -24,6 +24,7 @@ public class GetCoinResponse extends CryptoCompareBaseResponse {
 
     /**
      * The array of coins.
+     * The key is the coin's short name.
      */
     @SerializedName("Data")
     public Map<String, Coin> coinMap;
