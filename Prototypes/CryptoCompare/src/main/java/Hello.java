@@ -1,4 +1,4 @@
-import manager.CryptoCompareApiHelper;
+import cryptocompare.CryptoCompareApiHelper;
 import manager.MarketApiManager;
 import model.Coin;
 
@@ -16,7 +16,8 @@ public class Hello {
         // Try get the list of coins
         MarketApiManager marketApiManager = new MarketApiManager(new CryptoCompareApiHelper());
 
-        Map<String, Coin> coinMap = marketApiManager.GetCoinDictionary();
+        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+
 
         System.out.print("done");
 

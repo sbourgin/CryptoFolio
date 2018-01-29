@@ -1,4 +1,4 @@
-package response;
+package cryptocompare.reponse;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +14,7 @@ public class CryptoCompareBaseResponse {
     public String response;
 
     /**
-     * The message for the response.
+     * The message for the cryptocompare.
      */
     @SerializedName("Message")
     public String message;

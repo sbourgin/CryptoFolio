@@ -1,7 +1,7 @@
-package response;
+package cryptocompare.reponse;
 
 import com.google.gson.annotations.SerializedName;
-import model.Coin;
+import cryptocompare.model.CryptoCompareCoin;
 
 import java.util.Map;
 
@@ -27,6 +27,6 @@ public class GetCoinResponse extends CryptoCompareBaseResponse {
      * The key is the coin's short name.
      */
     @SerializedName("Data")
-    public Map<String, Coin> coinMap;
+    public Map<String, CryptoCompareCoin> coinMap;
 
 }
