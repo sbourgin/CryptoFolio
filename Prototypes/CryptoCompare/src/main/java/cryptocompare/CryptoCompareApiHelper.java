@@ -63,9 +63,9 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
         Map<String, Coin> coinMap = new HashMap<String, Coin>();
 
-      //  getCoinResponse.coinMap.forEach((k,v) -> coinMap.put(k, new Coin(v)));
+        getCoinResponse.coinMap.forEach((k,v) -> coinMap.put(k, new Coin(v)));
 
-        return null;
+        return coinMap;
     }
 
 }

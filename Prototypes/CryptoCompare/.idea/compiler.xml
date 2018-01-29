@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CryptoCompare" target="1.5" />
+      <module name="CryptoCompare" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
