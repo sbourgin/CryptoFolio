@@ -1,5 +1,6 @@
 package model;
 
+import com.google.common.base.Preconditions;
 import cryptocompare.model.CryptoCompareCoin;
 
 /**
@@ -37,6 +38,10 @@ public class Coin {
      * @param cryptoCompareCoin
      */
     public Coin (CryptoCompareCoin cryptoCompareCoin) {
+
+        // Check precondition
+        Preconditions.checkNotNull(cryptoCompareCoin);
+
         // Set members
         this.id = cryptoCompareCoin.id;
         this.coinName = cryptoCompareCoin.coinName;

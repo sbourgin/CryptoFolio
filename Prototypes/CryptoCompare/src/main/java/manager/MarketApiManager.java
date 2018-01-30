@@ -1,7 +1,6 @@
 package manager;
 
-import cryptocompare.model.CryptoCompareCoin;
-import cryptocompare.reponse.GetCoinResponse;
+import com.google.common.base.Preconditions;
 import model.Coin;
 
 import java.util.Map;
@@ -13,7 +12,12 @@ public class MarketApiManager {
 
     private IExchangeApiHelper exchangeApiHelper;
 
-    public MarketApiManager(IExchangeApiHelper exchangeApiHelper){
+    public MarketApiManager(IExchangeApiHelper exchangeApiHelper) {
+
+        // Check precondition
+        Preconditions.checkNotNull(exchangeApiHelper);
+
+        // Set members
         this.exchangeApiHelper = exchangeApiHelper;
     }
 
@@ -23,6 +27,7 @@ public class MarketApiManager {
      */
     public Map<String, Coin> getCoinDictionary() {
 
+        // Delegate the call to the exchange API helper
         return this.exchangeApiHelper.getAllCoins();
     }
 

@@ -9,8 +9,11 @@ import java.util.Map;
  */
 public interface IExchangeApiHelper {
 
+    /***
+     * Gets a map of all the existing coins
+     * @return A map with all the existing coins where the key is the coin's short name.
+     */
     public Map<String, Coin> getAllCoins();
-
 
 
 }

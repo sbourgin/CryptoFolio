@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 public class CryptoCompareBaseResponse {
 
     /**
-     * The type of resonse (success or failure).
+     * The type of response (success or failure).
      */
     @SerializedName("Response")
     public String response;
 
     /**
-     * The message for the cryptocompare.
+     * The message from the cryptocompare API.
      */
     @SerializedName("Message")
     public String message;

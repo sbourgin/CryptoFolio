@@ -1,7 +1,6 @@
 package cryptocompare.model;
 
 import com.google.gson.annotations.SerializedName;
-import model.Coin;
 
 /**
  * The coin model.
