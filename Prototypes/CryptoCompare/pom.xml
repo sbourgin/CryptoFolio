@@ -52,5 +52,12 @@
             <version>1.7.25</version>
         </dependency>
 
+        <!-- Retry library -->
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>failsafe</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+
     </dependencies>
 </project>

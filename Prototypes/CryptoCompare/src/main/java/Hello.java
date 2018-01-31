@@ -14,18 +14,16 @@ public class Hello {
 
     private static Logger logger = LoggerFactory.getLogger(Hello.class);
 
-    private static boolean isTestMode = true;
-
     public static void main(String[] args) {
 
         // Log application start
         logger.info("Application starts");
 
         // Log whether we are in test mode
-        logger.info("Application mode: {}", (isTestMode) ? "Test" : "Production");
+        logger.info("Application mode: {}", (ApplicationConfiguration.isTestMode) ? "Test" : "Production");
 
         // Try get the list of coins
-        MarketApiManager marketApiManager = new MarketApiManager((isTestMode) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
+        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.isTestMode) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
 
         // Get all the coins
         Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();

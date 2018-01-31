@@ -21,7 +21,7 @@ import java.util.Map;
 public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
     // TODO implement request limiter
-    // TODO find a retry manager library
+    // TODO find a retry manager library -- use a circuit breaker per API??
 
     /***
      * The application logger.
