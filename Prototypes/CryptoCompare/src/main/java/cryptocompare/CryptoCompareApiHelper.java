@@ -30,17 +30,15 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
     private final String API_BASE_URL = "https://min-api.cryptocompare.com/data/";
 
-    private final int CONNECT_TIMEOUT = 1000; // TODO check number
+    private final int CONNECT_TIMEOUT_MILLISECONDS = 5 * 1000; /* 5 seconds */
 
-    private final int SOCKET_TIMEOUT = 1000;  // TODO check number
-
+    private final int SOCKET_TIMEOUT_MILLISECONDS = 5 * 1000;  /* 5 seconds */
 
     public CryptoCompareApiHelper() {
 
     }
 
     public Map<String, Coin> getAllCoins() {
-
         // Create the URI
         URI apiURI = null;
         try {
@@ -51,12 +49,15 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
             throw new RuntimeException("Failed to create the URI", e);
         }
 
+        // Acquire the authorization of executing this API call (this call blocks the thread)
+        CryptoCompareRateLimiter.getInstance().GetPriceApiCallAuthorization();
+
         // Execute the request
         String responseFromApi = null;
         try {
             responseFromApi = Request.Get(apiURI)
-                    .connectTimeout(this.CONNECT_TIMEOUT)
-                    .socketTimeout(this.SOCKET_TIMEOUT)
+                    .connectTimeout(this.CONNECT_TIMEOUT_MILLISECONDS)
+                    .socketTimeout(this.SOCKET_TIMEOUT_MILLISECONDS)
                     .execute().returnContent().asString();
 
         } catch (IOException e) {

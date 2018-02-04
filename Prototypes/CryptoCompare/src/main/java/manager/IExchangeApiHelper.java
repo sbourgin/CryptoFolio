@@ -15,5 +15,4 @@ public interface IExchangeApiHelper {
      */
     public Map<String, Coin> getAllCoins();
 
-
 }

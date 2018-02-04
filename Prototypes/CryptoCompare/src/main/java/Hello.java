@@ -31,5 +31,4 @@ public class Hello {
         // Log application end
         logger.info("Application stops");
     }
-
 }
