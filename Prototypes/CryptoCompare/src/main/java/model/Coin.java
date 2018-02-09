@@ -1,5 +1,6 @@
 package model;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import cryptocompare.model.CryptoCompareCoin;
 
@@ -34,6 +35,11 @@ public class Coin {
     public String coinName;
 
     /**
+     * Default constructor.
+     */
+    public Coin () {}
+
+    /**
      * Creates a coin using a CryptoCompareCoin.
      * @param cryptoCompareCoin
      */
@@ -48,5 +54,22 @@ public class Coin {
         this.imageUrl = cryptoCompareCoin.imageUrl;
         this.shortName = cryptoCompareCoin.shortName;
         this.url = cryptoCompareCoin.url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coin coin = (Coin) o;
+        return id == coin.id &&
+                Objects.equal(url, coin.url) &&
+                Objects.equal(imageUrl, coin.imageUrl) &&
+                Objects.equal(shortName, coin.shortName) &&
+                Objects.equal(coinName, coin.coinName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, url, imageUrl, shortName, coinName);
     }
 }

@@ -14,8 +14,6 @@ import java.util.Map;
 public class LocalExchangeApiHelper implements IExchangeApiHelper {
 
 
-
-
     public Map<String, Coin> getAllCoins() {
 
         // Use an hardcoded list of coins

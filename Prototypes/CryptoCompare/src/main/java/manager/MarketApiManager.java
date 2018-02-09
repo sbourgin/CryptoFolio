@@ -30,7 +30,6 @@ public class MarketApiManager {
                 .retryOn(failure -> failure instanceof IOException)
                 .withBackoff(5, 90, TimeUnit.SECONDS)
                 .withMaxRetries(30);
-
     }
 
     /**
