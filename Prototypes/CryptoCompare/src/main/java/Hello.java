@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class Hello {
 
+    /**
+     * The logger.
+     */
     private static Logger logger = LoggerFactory.getLogger(Hello.class);
 
     public static void main(String[] args) {

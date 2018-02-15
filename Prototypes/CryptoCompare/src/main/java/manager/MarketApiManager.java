@@ -15,12 +15,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class MarketApiManager {
 
+    /**
+     * The exchange API helper.
+     */
     private IExchangeApiHelper exchangeApiHelper;
 
+    /**
+     * The retry policy for the API calls.
+     */
     private RetryPolicy retryPolicy;
 
+    /**
+     * Constructor.
+     * @param exchangeApiHelper
+     */
     public MarketApiManager(IExchangeApiHelper exchangeApiHelper) {
-
         // Check precondition
         Preconditions.checkNotNull(exchangeApiHelper);
 
@@ -46,5 +55,4 @@ public class MarketApiManager {
             }
         });
     }
-
 }

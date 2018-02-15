@@ -14,5 +14,4 @@ public interface IExchangeApiHelper {
      * @return A map with all the existing coins where the key is the coin's short name.
      */
     public Map<String, Coin> getAllCoins();
-
 }

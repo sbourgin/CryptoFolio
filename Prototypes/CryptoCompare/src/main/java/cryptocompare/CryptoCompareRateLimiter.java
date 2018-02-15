@@ -7,22 +7,40 @@ import com.google.common.util.concurrent.RateLimiter;
  */
 public final class CryptoCompareRateLimiter {
 
-
+    /**
+     * Number of calls to the historical API allowed per second.
+     */
     private final static int HISTORICAL_API_CALL_PER_SECOND = 8000 / 60;
-    private final static int PRICE_API_CALL_PER_SECOND = 150000 / 60;
-    private final static int NEWS_API_CALL_PER_SECOND = 3000 / 60;
-
-    private static volatile CryptoCompareRateLimiter instance = null;
-
 
     /**
-     * The Rate limiter for the API CryptoCompare.
+     * Number of calls to the price API allowed per second.
+     */
+    private final static int PRICE_API_CALL_PER_SECOND = 150000 / 60;
+
+    /**
+     * Number of calls to the news API allowed per second.
+     */
+    private final static int NEWS_API_CALL_PER_SECOND = 3000 / 60;
+
+    /**
+     * The instance of the singleton.
+     */
+    private static volatile CryptoCompareRateLimiter instance = null;
+
+    /**
+     * The rate limiter for the historical API.
      */
     private RateLimiter historicalApiRateLimiter;
 
+    /**
+     * The rate limiter for the price API.
+     */
     private RateLimiter priceApiRateLimiter;
-    private RateLimiter newsApiRateLimiter;
 
+    /**
+     * The rate limiter for the news API.
+     */
+    private RateLimiter newsApiRateLimiter;
 
     /**
      * Constructor.
@@ -52,16 +70,28 @@ public final class CryptoCompareRateLimiter {
         return CryptoCompareRateLimiter.instance;
     }
 
+    /**
+     * Gets the authorization to call the historical API. This will block the thread if wait is needed.
+     */
     public void GetHistoricalApiCallAuthorization() {
+        // Acquire the authorization for one call
         this.historicalApiRateLimiter.acquire(1);
 
     }
 
+    /**
+     * Gets the authorization to call the price API. This will block the thread if wait is needed.
+     */
     public void GetPriceApiCallAuthorization() {
+        // Acquire the authorization for one call
         this.priceApiRateLimiter.acquire(1);
     }
 
+    /**
+     * Gets the authorization to call the news API. This will block the thread if wait is needed.
+     */
     public void GetNewsApiCallAuthorization() {
+        // Acquire the authorization for one call
         this.newsApiRateLimiter.acquire(1);
     }
 }

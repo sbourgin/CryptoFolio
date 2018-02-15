@@ -20,24 +20,36 @@ import java.util.Map;
  */
 public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
-    // TODO implement request limiter
-    // TODO find a retry manager library -- use a circuit breaker per API??
-
     /***
      * The application logger.
      */
     private static Logger logger = LoggerFactory.getLogger(CryptoCompareApiHelper.class);
 
+    /**
+     * Base url for the Crypto Compare API.
+     */
     private final String API_BASE_URL = "https://min-api.cryptocompare.com/data/";
 
+    /**
+     * Timeout for the connection.
+     */
     private final int CONNECT_TIMEOUT_MILLISECONDS = 5 * 1000; /* 5 seconds */
 
+    /**
+     * Timeout for the socket.
+     */
     private final int SOCKET_TIMEOUT_MILLISECONDS = 5 * 1000;  /* 5 seconds */
 
+    /**
+     * Default constructor.
+     */
     public CryptoCompareApiHelper() {
-
     }
 
+    /***
+     * Gets a map of all the existing coins
+     * @return A map with all the existing coins where the key is the coin's short name.
+     */
     public Map<String, Coin> getAllCoins() {
         // Create the URI
         URI apiURI = null;
