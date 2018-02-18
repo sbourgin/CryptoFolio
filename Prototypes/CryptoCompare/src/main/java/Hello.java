@@ -1,10 +1,13 @@
+import Core.ApplicationConfiguration;
 import cryptocompare.CryptoCompareApiHelper;
 import manager.LocalExchangeApiHelper;
 import manager.MarketApiManager;
-import model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,13 +26,20 @@ public class Hello {
         logger.info("Application starts");
 
         // Log whether we are in test mode
-        logger.info("Application mode: {}", (ApplicationConfiguration.isTestMode) ? "Test" : "Production");
+        logger.info("Application mode: {}", (ApplicationConfiguration.IS_TEST_MODE) ? "Test" : "Production");
 
         // Try get the list of coins
-        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.isTestMode) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
+        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_TEST_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
 
         // Get all the coins
-        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+        // Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+
+        // Get the current prices
+        List<String> coinShortNameList = new ArrayList<String>(); // TODO use previous coinMap
+        coinShortNameList.add("ETH");
+        coinShortNameList.add("BTC");
+        coinShortNameList.add("ADA");
+        Map<String, BigDecimal> coinsCurrentValueMap = marketApiManager.getCoinsCurrentValue(coinShortNameList);
 
         // Log application end
         logger.info("Application stops");
