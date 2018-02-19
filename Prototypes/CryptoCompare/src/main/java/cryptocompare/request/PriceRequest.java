@@ -1,7 +1,6 @@
 package cryptocompare.request;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.annotations.SerializedName;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
