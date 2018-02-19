@@ -1,9 +1,11 @@
 package cryptocompare;
 
+import Core.PreconditionsValidation;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
+import cryptocompare.request.PriceHistoricalRequest;
 import cryptocompare.request.PriceRequest;
 import manager.IExchangeApiHelper;
 import model.Coin;
@@ -18,7 +20,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +67,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         URI apiURI = this.tryCreateURI("data/all/coinlist", null);
 
         // Acquire the authorization of executing this API call (this call blocks the thread)
-        CryptoCompareRateLimiter.getInstance().GetPriceApiCallAuthorization();
+        CryptoCompareRateLimiter.getInstance().getPriceApiCallAuthorization();
 
         // Execute the request
         String responseFromApi = this.executesRequest(apiURI);
@@ -88,6 +91,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         // Check preconditions
         Preconditions.checkNotNull(coinShortNameList);
         Preconditions.checkArgument(coinShortNameList.size() > 0);
+        PreconditionsValidation.checkStringNotEmpty(currencyShortName);
 
         // Create a Price Request
         PriceRequest priceRequest = new PriceRequest(coinShortNameList, currencyShortName);
@@ -96,7 +100,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         URI apiURI = this.tryCreateURI("data/pricemulti", priceRequest.generateParameters());
 
         // Acquire the authorization of executing this API call (this call blocks the thread)
-        CryptoCompareRateLimiter.getInstance().GetPriceApiCallAuthorization();
+        CryptoCompareRateLimiter.getInstance().getPriceApiCallAuthorization();
 
         // Execute the request
         String responseFromApi = this.executesRequest(apiURI);
@@ -123,8 +127,34 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
     }
 
     @Override
-    public Map<String, BigDecimal> getCoinsHistoricalValue(List<String> coinShortNameList, String currencyShortName, Timestamp timestamp) {
-        return null;
+    public BigDecimal getCoinHistoricalValue(String coinShortName, String currencyShortName, ZonedDateTime zonedDateTime) {
+        // Check preconditions
+        PreconditionsValidation.checkStringNotEmpty(coinShortName);
+        PreconditionsValidation.checkStringNotEmpty(currencyShortName);
+
+        // Create a price historical request
+        PriceHistoricalRequest priceHistoricalRequest = new PriceHistoricalRequest(coinShortName, currencyShortName, zonedDateTime);
+
+        // Create the URI
+        URI apiURI = this.tryCreateURI("data/pricehistorical", priceHistoricalRequest.generateParameters());
+
+        // Acquire the authorization of executing this API call (this call blocks the thread)
+        CryptoCompareRateLimiter.getInstance().getHistoricalApiCallAuthorization();
+
+        // Execute the request
+        String responseFromApi = this.executesRequest(apiURI);
+
+        // Parse the response
+        Gson gson = new GsonBuilder().create();
+        LinkedTreeMap<String, LinkedTreeMap<String, Double>> coinPriceApiResponseMap = gson.fromJson(responseFromApi, new LinkedTreeMap<String, LinkedTreeMap<String, Double>>().getClass());
+
+        // Return early if the response doesn't contain any coin
+        if (coinPriceApiResponseMap == null || coinPriceApiResponseMap.size() == 0 || false == coinPriceApiResponseMap.get(coinShortName).containsKey(currencyShortName))
+            return null;
+
+        // Return the price
+        return BigDecimal.valueOf(coinPriceApiResponseMap.get(coinShortName).get(currencyShortName));
+
     }
 
     /**
@@ -134,21 +164,34 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
      * @return The URI of the endpoint.
      */
     private URI tryCreateURI(String endpointAddress, List<NameValuePair> requestParameterList) {
+        // Check preconditions
+        Preconditions.checkNotNull(endpointAddress);
+        Preconditions.checkArgument(endpointAddress.length() > 0);
+
         // Try create the URI
-        URI apiURI;
+        URIBuilder apiURIBuilder;
         try {
-            apiURI = new URIBuilder(this.API_BASE_URL)
-                    .setPath(endpointAddress)
-                    .addParameters(requestParameterList)
-                    .build();
+            apiURIBuilder = new URIBuilder(this.API_BASE_URL).setPath(endpointAddress);
+
+            // Add the parameters if specified
+            if (requestParameterList != null)
+                apiURIBuilder.addParameters(requestParameterList);
+
+            // Build and return the URI
+            return apiURIBuilder.build();
         } catch (URISyntaxException e) {
             logger.error("An exception occurred when trying to create the URI", e);
             throw new RuntimeException("Failed to create the URI", e);
         }
-        return apiURI;
     }
 
+    /**
+     * Executes the request and return the response.
+     * @param apiURI The request URI to execute
+     * @return The response of the request
+     */
     private String executesRequest(URI apiURI) {
+        // Execute the request
         String responseFromApi = null;
         try {
             responseFromApi = Request.Get(apiURI)

@@ -73,7 +73,7 @@ public final class CryptoCompareRateLimiter {
     /**
      * Gets the authorization to call the historical API. This will block the thread if wait is needed.
      */
-    public void GetHistoricalApiCallAuthorization() {
+    public void getHistoricalApiCallAuthorization() {
         // Acquire the authorization for one call
         this.historicalApiRateLimiter.acquire(1);
 
@@ -82,7 +82,7 @@ public final class CryptoCompareRateLimiter {
     /**
      * Gets the authorization to call the price API. This will block the thread if wait is needed.
      */
-    public void GetPriceApiCallAuthorization() {
+    public void getPriceApiCallAuthorization() {
         // Acquire the authorization for one call
         this.priceApiRateLimiter.acquire(1);
     }
@@ -90,7 +90,7 @@ public final class CryptoCompareRateLimiter {
     /**
      * Gets the authorization to call the news API. This will block the thread if wait is needed.
      */
-    public void GetNewsApiCallAuthorization() {
+    public void getNewsApiCallAuthorization() {
         // Acquire the authorization for one call
         this.newsApiRateLimiter.acquire(1);
     }

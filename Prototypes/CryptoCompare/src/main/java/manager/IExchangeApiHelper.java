@@ -3,7 +3,8 @@ package manager;
 import model.Coin;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,5 +21,5 @@ public interface IExchangeApiHelper {
 
     public Map<String, BigDecimal> getCoinsCurrentValue(List<String> coinShortNameList, String currencyShortName);
 
-    public Map<String, BigDecimal> getCoinsHistoricalValue(List<String> coinShortNameList, String currencyShortName, Timestamp timestamp);
+    public BigDecimal getCoinHistoricalValue(String coinShortName, String currencyShortName, ZonedDateTime zonedDateTime);
 }

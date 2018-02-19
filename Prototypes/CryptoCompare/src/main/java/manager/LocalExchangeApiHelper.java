@@ -7,8 +7,8 @@ import cryptocompare.reponse.GetCoinResponse;
 import model.Coin;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +53,7 @@ public class LocalExchangeApiHelper implements IExchangeApiHelper {
     }
 
     @Override
-    public Map<String, BigDecimal> getCoinsHistoricalValue(List<String> coinShortNameList, String currencyShortName, Timestamp timestamp) {
-        return null;
+    public BigDecimal getCoinHistoricalValue(String coinShortName, String currencyShortName, ZonedDateTime zonedDateTime) {
+        return BigDecimal.valueOf(ThreadLocalRandom.current().nextInt(1, 12000));
     }
 }

@@ -8,7 +8,8 @@ import net.jodah.failsafe.RetryPolicy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -69,12 +70,12 @@ public class MarketApiManager {
         });
     }
 
-    public Map<String, BigDecimal> getCoinsHistoricalValue(List<String> coinShortNameList, Timestamp timestamp) {
+    public BigDecimal getCoinHistoricalValue(String coinShortName, ZonedDateTime zonedDateTime) {
         // Delegate the call to the exchange API helper
         // Wrap it around a retry manager
-        return Failsafe.with(this.retryPolicy).get(new Callable<Map<String, BigDecimal>>() {
-            public Map<String, BigDecimal> call() {
-                return exchangeApiHelper.getCoinsHistoricalValue(coinShortNameList, ApplicationConfiguration.DEFAULT_CURRENCY, timestamp);
+        return Failsafe.with(this.retryPolicy).get(new Callable<BigDecimal>() {
+            public BigDecimal call() {
+                return exchangeApiHelper.getCoinHistoricalValue(coinShortName, ApplicationConfiguration.DEFAULT_CURRENCY, zonedDateTime);
             }
         });
     }

@@ -15,17 +15,17 @@ public class PriceRequest {
     /**
      * The coins short name to include in the price request. The value is a comma separated list.
      */
-    public List<String> coinShortNameList;
+    private List<String> coinShortNameList;
 
     /**
      * The currency short name for the coin's price.
      */
-    public String currencyShortName;
+    private String currencyShortName;
 
     /**
      * Constructor.
-     * @param coinShortNameList The coins short name to include in the price request.
-     * @param currencyShortName The currency short name for the coin's price..
+     * @param coinShortNameList The coins short name to include in the price request
+     * @param currencyShortName The currency short name for the coin's price
      */
     public PriceRequest(List<String> coinShortNameList, String currencyShortName) {
         // Check the preconditions
@@ -39,10 +39,14 @@ public class PriceRequest {
         this.currencyShortName = currencyShortName;
     }
 
+    /**
+     * Generates the parameters for the http request.
+     * @return The list of pair parameters.
+     */
     public List<NameValuePair> generateParameters() {
         List<NameValuePair> parameterList = new ArrayList<>();
         parameterList.add(new BasicNameValuePair("fsyms",  String.join(",", this.coinShortNameList)));
-        parameterList.add(new BasicNameValuePair("tsyms",  String.join(",", this.currencyShortName)));
+        parameterList.add(new BasicNameValuePair("tsyms",  this.currencyShortName));
         return parameterList;
     }
 }
