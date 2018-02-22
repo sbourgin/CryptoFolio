@@ -20,14 +20,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sylvain on 1/27/18.
+ * The helper to consume the CryptoCompare API.
+ * Documentation: www.cryptocompare.com/api/
  */
 public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
@@ -54,15 +54,15 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
     /**
      * Default constructor.
      */
-    public CryptoCompareApiHelper() {
-    }
+    public CryptoCompareApiHelper() { }
 
     /***
-     * Gets a map of all the existing coins
-     * @return A map with all the existing coins where the key is the coin's short name.
+     * Gets all the existing coins.
+     * @return A map with all existing coins (the key is the coin's short name).
      */
     @Override
     public Map<String, Coin> getAllCoins() {
+
         // Create the URI
         URI apiURI = this.tryCreateURI("data/all/coinlist", null);
 
@@ -86,8 +86,15 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         return coinMap;
     }
 
+    /**
+     * Gets the current price value of a list of coin.
+     * @param coinShortNameList The list of coins to evaluate
+     * @param currencyShortName The currency for the price request.
+     * @return A map of coin's short name and its price.
+     */
     @Override
     public Map<String, BigDecimal> getCoinsCurrentValue(List<String> coinShortNameList, String currencyShortName) {
+
         // Check preconditions
         Preconditions.checkNotNull(coinShortNameList);
         Preconditions.checkArgument(coinShortNameList.size() > 0);
@@ -126,8 +133,16 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         return coinPriceResult;
     }
 
+    /**
+     * Gets the price of a coin in a specified currency at a specified time.
+     * @param coinShortName The coin's short name to lookup
+     * @param currencyShortName The currency to use
+     * @param zonedDateTime The specified time for the lookup
+     * @return The price of the coin
+     */
     @Override
     public BigDecimal getCoinHistoricalValue(String coinShortName, String currencyShortName, ZonedDateTime zonedDateTime) {
+
         // Check preconditions
         PreconditionsValidation.checkStringNotEmpty(coinShortName);
         PreconditionsValidation.checkStringNotEmpty(currencyShortName);
@@ -154,7 +169,6 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
         // Return the price
         return BigDecimal.valueOf(coinPriceApiResponseMap.get(coinShortName).get(currencyShortName));
-
     }
 
     /**
@@ -164,6 +178,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
      * @return The URI of the endpoint.
      */
     private URI tryCreateURI(String endpointAddress, List<NameValuePair> requestParameterList) {
+
         // Check preconditions
         Preconditions.checkNotNull(endpointAddress);
         Preconditions.checkArgument(endpointAddress.length() > 0);
@@ -191,6 +206,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
      * @return The response of the request
      */
     private String executesRequest(URI apiURI) {
+
         // Execute the request
         String responseFromApi = null;
         try {

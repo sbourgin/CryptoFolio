@@ -14,7 +14,7 @@ public class CryptoCompareBaseResponse {
     public String response;
 
     /**
-     * The message from the cryptocompare API.
+     * The message from the API.
      */
     @SerializedName("Message")
     public String message;

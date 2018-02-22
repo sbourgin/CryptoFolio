@@ -3,7 +3,7 @@ package Core;
 import com.google.common.base.Preconditions;
 
 /**
- * Created by sylvain on 2/18/18.
+ * Utils methods for precondition validation.
  */
 public class PreconditionsValidation {
 

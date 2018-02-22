@@ -7,10 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,19 +25,23 @@ public class Hello {
      */
     private static Logger logger = LoggerFactory.getLogger(Hello.class);
 
+    /**
+     * Application entry point method.
+     * @param args Arguments
+     */
     public static void main(String[] args) {
 
         // Log application start
         logger.info("Application starts");
 
-        // Log whether we are in test mode
-        logger.info("Application mode: {}", (ApplicationConfiguration.IS_TEST_MODE) ? "Test" : "Production");
+        // Log whether we are in demo mode
+        logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
 
-        // Try get the list of coins
-        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_TEST_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
+        // Create the market api manager
+        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
 
-        // Get all the coins
-   //     Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+        // Get the list of coins
+        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
 
         // Get the current prices
         List<String> coinShortNameList = new ArrayList<String>();

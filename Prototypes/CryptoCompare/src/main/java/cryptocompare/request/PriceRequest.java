@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sylvain on 2/15/18.
+ *  * The request to get the current price of a coin in a specified currency.
  */
 public class PriceRequest {
+
     /**
      * The coins short name to include in the price request. The value is a comma separated list.
      */
@@ -27,6 +28,7 @@ public class PriceRequest {
      * @param currencyShortName The currency short name for the coin's price
      */
     public PriceRequest(List<String> coinShortNameList, String currencyShortName) {
+
         // Check the preconditions
         Preconditions.checkNotNull(coinShortNameList);
         Preconditions.checkArgument(coinShortNameList.size() > 0);

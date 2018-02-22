@@ -6,7 +6,7 @@ import cryptocompare.model.CryptoCompareCoin;
 import java.util.Map;
 
 /**
- * Created by sylvain on 1/27/18.
+ * The coin response as provided by the API.
  */
 public class GetCoinResponse extends CryptoCompareBaseResponse {
 

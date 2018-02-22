@@ -4,13 +4,12 @@ import Core.PreconditionsValidation;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sylvain on 2/15/18.
+ * The request to get the price of a coin in a specified currency at a specified time.
  */
 public class PriceHistoricalRequest {
 

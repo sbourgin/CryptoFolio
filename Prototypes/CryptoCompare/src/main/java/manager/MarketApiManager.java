@@ -8,7 +8,6 @@ import net.jodah.failsafe.RetryPolicy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by sylvain on 1/15/18.
+ * The market API manager which provides high level implementation of an exchange API.
  */
 public class MarketApiManager {
+
     /**
      * The exchange API helper.
      */
@@ -34,6 +34,7 @@ public class MarketApiManager {
      * @param exchangeApiHelper
      */
     public MarketApiManager(IExchangeApiHelper exchangeApiHelper) {
+
         // Check precondition
         Preconditions.checkNotNull(exchangeApiHelper);
 
@@ -50,6 +51,7 @@ public class MarketApiManager {
      * The key is the coin's short name.
      */
     public Map<String, Coin> getCoinDictionary() {
+
         // Delegate the call to the exchange API helper
         // Wrap it around a retry manager
         return Failsafe.with(this.retryPolicy).get(new Callable<Map<String, Coin>>() {
@@ -59,6 +61,11 @@ public class MarketApiManager {
         });
     }
 
+    /**
+     * Gets the current price value of a list of coin.
+     * @param coinShortNameList The list of coins to evaluate
+     * @return A map of coin's short name and its price.
+     */
     public Map<String, BigDecimal> getCoinsCurrentValue(List<String> coinShortNameList) {
 
         // Delegate the call to the exchange API helper
@@ -70,7 +77,14 @@ public class MarketApiManager {
         });
     }
 
+    /**
+     * Gets the price of a coin in a specified currency at a specified time.
+     * @param coinShortName The coin's short name to lookup
+     * @param zonedDateTime The specified time for the lookup
+     * @return The price of the coin
+     */
     public BigDecimal getCoinHistoricalValue(String coinShortName, ZonedDateTime zonedDateTime) {
+
         // Delegate the call to the exchange API helper
         // Wrap it around a retry manager
         return Failsafe.with(this.retryPolicy).get(new Callable<BigDecimal>() {

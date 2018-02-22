@@ -3,7 +3,7 @@ package cryptocompare.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * The coin model.
+ * The coin's model.
  */
 public class CryptoCompareCoin {
 
@@ -22,21 +22,21 @@ public class CryptoCompareCoin {
 
     /**
      * The URL for the coin's image.
-     * Example: /media/19782/ltc.png
+     * @Example: /media/19782/ltc.png
      */
     @SerializedName("ImageUrl")
     public String imageUrl;
 
     /**
      * The coin's short name.
-     * Example: LTC for Litecoin.
+     * @Example: LTC for Litecoin.
      */
     @SerializedName("Name")
     public String shortName;
 
     /**
      * The coin's name.
-     * Example: Litecoin.
+     * @Example: Litecoin.
      */
     @SerializedName("CoinName")
     public String coinName;
