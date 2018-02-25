@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity
 public class Employee implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7610814673212268704L;
 
     private int id;
     private String firstName;
@@ -28,7 +28,7 @@ public class Employee implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
