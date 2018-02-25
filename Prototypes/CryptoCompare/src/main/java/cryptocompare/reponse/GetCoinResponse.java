@@ -28,5 +28,4 @@ public class GetCoinResponse extends CryptoCompareBaseResponse {
      */
     @SerializedName("Data")
     public Map<String, CryptoCompareCoin> coinMap;
-
 }
