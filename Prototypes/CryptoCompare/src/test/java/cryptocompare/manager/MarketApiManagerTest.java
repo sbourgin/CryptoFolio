@@ -28,7 +28,7 @@ public class MarketApiManagerTest {
     }
 
     @Test
-    public void GetCoinDictionary() throws Exception {
+    public void GetCoinDictionary() {
 
         // Arrange
         Map<String, Coin> allCoinsMap = this.getHardcodedCoinMap();
@@ -44,7 +44,7 @@ public class MarketApiManagerTest {
     }
 
     @Test
-    public void GetCoinDictionaryWithFirstChanceException() throws Exception {
+    public void GetCoinDictionaryWithFirstChanceException() {
 
         // Arrange
         Map<String, Coin> allCoinsMap = this.getHardcodedCoinMap();

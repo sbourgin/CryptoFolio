@@ -8,11 +8,10 @@ import com.google.common.base.Preconditions;
 public class PreconditionsValidation {
 
     /**
-     * Checks that a string is not null nor empty (length is 0).
+     * Checks that a string is not null nor empty (length is 0 and is not all whitespaces).
      * @param string The string to validate
      */
     public static void checkStringNotEmpty(String string) {
-        Preconditions.checkNotNull(string);
-        Preconditions.checkArgument(string.length() > 0);
+        Preconditions.checkArgument( (string != null) && (string.trim().length() > 0));
     }
 }
