@@ -11,17 +11,17 @@ public final class CryptoCompareRateLimiter {
     /**
      * Number of calls to the historical API allowed per second.
      */
-    private final static int HISTORICAL_API_CALL_PER_SECOND = 8000 / 3600;
+    private final static double HISTORICAL_API_CALL_PER_SECOND = (double) 8000 / 3600;
 
     /**
      * Number of calls to the price API allowed per second.
      */
-    private final static int PRICE_API_CALL_PER_SECOND = 150000 / 3600;
+    private final static double PRICE_API_CALL_PER_SECOND = (double) 150000 / 3600;
 
     /**
      * Number of calls to the news API allowed per second.
      */
-    private final static int NEWS_API_CALL_PER_SECOND = 3000 / 3600;
+    private final static double NEWS_API_CALL_PER_SECOND = (double) 3000 / 3600;
 
     /**
      * The instance of the singleton.

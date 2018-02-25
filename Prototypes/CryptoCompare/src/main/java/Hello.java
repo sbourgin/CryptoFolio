@@ -52,7 +52,10 @@ public class Hello {
 
         // Get historical prices
         ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2016, Month.JANUARY, 1, 0, 0,0), ZoneId.of("UTC"));
-        BigDecimal coinsHistoricalValue = marketApiManager.getCoinHistoricalValue("BTC", zonedDateTime);
+        BigDecimal btcHistoricalValue = marketApiManager.getCoinHistoricalValue("BTC", zonedDateTime);
+
+        // Print the price
+        System.out.println(new StringBuilder().append("Bitcoin historical price: ").append(btcHistoricalValue).append(" at ").append(zonedDateTime.toString()).toString());
 
         // Log application end
         logger.info("Application stops");
