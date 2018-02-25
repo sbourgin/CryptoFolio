@@ -3,20 +3,24 @@ package model;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
- * Created by sylvain on 2/22/18.
+ * Created by sylvain on 2/24/18.
  */
 @Entity
-@Table(name = "EMPLOYEE", schema = "cryptofolio", catalog = "")
-public class EmployeeEntity {
+public class Employee implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String firstName;
     private String lastName;
     private Integer salary;
 
-    public EmployeeEntity() {}
-    public EmployeeEntity(String fname, String lname, int salary) {
+    public Employee() {}
+
+    public Employee(String fname, String lname, int salary) {
         this.firstName = fname;
         this.lastName = lname;
         this.salary = salary;
@@ -24,6 +28,7 @@ public class EmployeeEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -66,11 +71,11 @@ public class EmployeeEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EmployeeEntity that = (EmployeeEntity) o;
-        return id == that.id &&
-                Objects.equal(firstName, that.firstName) &&
-                Objects.equal(lastName, that.lastName) &&
-                Objects.equal(salary, that.salary);
+        Employee employee = (Employee) o;
+        return id == employee.id &&
+                Objects.equal(firstName, employee.firstName) &&
+                Objects.equal(lastName, employee.lastName) &&
+                Objects.equal(salary, employee.salary);
     }
 
     @Override

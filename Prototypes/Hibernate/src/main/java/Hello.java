@@ -14,5 +14,7 @@ public class Hello {
         System.out.println("Hello, World");
 
         new ManageEmployee().plouf(null);
+
+        System.out.println("End, World");
     }
 }
