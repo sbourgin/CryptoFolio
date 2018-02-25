@@ -16,10 +16,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by sylvain on 2/3/18.
+ * Tests the marketApiManager implementation with a mock for the network calls.
  */
 public class MarketApiManagerTest {
 
+    /**
+     * The market api manager.
+     */
     private IExchangeApiHelper exchangeApiHelper;
 
     @Before

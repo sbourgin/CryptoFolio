@@ -1,4 +1,4 @@
-package Core;
+package core;
 
 import com.google.common.base.Preconditions;
 

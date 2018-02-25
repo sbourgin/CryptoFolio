@@ -1,6 +1,6 @@
 package cryptocompare.request;
 
-import Core.PreconditionsValidation;
+import core.PreconditionsValidation;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 

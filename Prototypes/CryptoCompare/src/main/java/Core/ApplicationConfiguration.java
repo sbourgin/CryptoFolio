@@ -1,4 +1,4 @@
-package Core;
+package core;
 
 /**
  * Defines the configuration of the application.

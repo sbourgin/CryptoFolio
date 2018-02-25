@@ -1,6 +1,6 @@
 package manager;
 
-import Core.ApplicationConfiguration;
+import core.ApplicationConfiguration;
 import com.google.common.base.Preconditions;
 import model.Coin;
 import net.jodah.failsafe.Failsafe;

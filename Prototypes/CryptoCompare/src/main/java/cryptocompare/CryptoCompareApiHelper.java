@@ -1,6 +1,6 @@
 package cryptocompare;
 
-import Core.PreconditionsValidation;
+import core.PreconditionsValidation;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -114,7 +114,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
 
         // Parse the list of coins
         Gson gson = new GsonBuilder().create();
-        LinkedTreeMap<String, LinkedTreeMap<String, BigDecimal>> coinPriceApiResponseMap = gson.fromJson(responseFromApi, new LinkedTreeMap<String, LinkedTreeMap<String, BigDecimal>>().getClass());
+        LinkedTreeMap<String, LinkedTreeMap<String, Double>> coinPriceApiResponseMap = gson.fromJson(responseFromApi, new LinkedTreeMap<String, LinkedTreeMap<String, Double>>().getClass());
         Map<String, BigDecimal> coinPriceResult = new HashMap<String, BigDecimal>();
 
         // Return early if the response doesn't contain any coin
@@ -128,7 +128,7 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
                 continue;
 
             // Add the price to the result map
-            coinPriceResult.put(coinShortName, coinPriceApiResponseMap.get(coinShortName).get(currencyShortName));
+            coinPriceResult.put(coinShortName, BigDecimal.valueOf(coinPriceApiResponseMap.get(coinShortName).get(currencyShortName)));
         }
         return coinPriceResult;
     }

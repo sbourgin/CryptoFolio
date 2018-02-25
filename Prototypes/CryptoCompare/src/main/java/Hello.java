@@ -1,4 +1,4 @@
-import Core.ApplicationConfiguration;
+import core.ApplicationConfiguration;
 import cryptocompare.CryptoCompareApiHelper;
 import manager.LocalExchangeApiHelper;
 import manager.MarketApiManager;
