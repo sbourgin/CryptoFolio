@@ -7,11 +7,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
 import java.net.SocketTimeoutException;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -25,11 +33,17 @@ public class MarketApiManagerTest {
      */
     private IExchangeApiHelper exchangeApiHelper;
 
+    /**
+     * Method executed before all the tests.
+     */
     @Before
     public void beforeEachTest() {
         this.exchangeApiHelper = Mockito.mock(IExchangeApiHelper.class);
     }
 
+    /**
+     * Tests that we can retrieve all the coins.
+     */
     @Test
     public void GetCoinDictionary() {
 
@@ -46,6 +60,9 @@ public class MarketApiManagerTest {
         assertTrue(allCoinsMap.equals(actualValue));
     }
 
+    /**
+     * Tests that we can retrieve all the coins and the retry strategy works.
+     */
     @Test
     public void GetCoinDictionaryWithFirstChanceException() {
 
@@ -61,6 +78,56 @@ public class MarketApiManagerTest {
         assertEquals(allCoinsMap.size(), actualValue.size());
         assertTrue(allCoinsMap.equals(actualValue));
         verify(this.exchangeApiHelper, times(2)).getAllCoins();
+    }
+
+    /**
+     * Tests that we can retrieve the current price of coins.
+     */
+    @Test
+    public void getCoinsCurrentValue() {
+
+        // Arrange
+        Map<String, BigDecimal> expectedCurrentValueMap = new HashMap<>();
+        expectedCurrentValueMap.put("ABC", BigDecimal.valueOf(0.567));
+        expectedCurrentValueMap.put("DEF", BigDecimal.valueOf(34567));
+
+        // The list of coin to query
+        List<String> coinShortNameList = new ArrayList<>();
+        coinShortNameList.add("ABC");
+        coinShortNameList.add("DEF");
+
+        // Set up the market api manager with the mock
+        when(this.exchangeApiHelper.getCoinsCurrentValue(anyList(), any(String.class))).thenReturn(expectedCurrentValueMap);
+        MarketApiManager marketApiManager = new MarketApiManager(this.exchangeApiHelper);
+
+        // Act
+        Map<String, BigDecimal> coinsCurrentValueMap = marketApiManager.getCoinsCurrentValue(coinShortNameList);
+
+        // Assert
+        assertNotNull(coinsCurrentValueMap);
+        assertEquals(expectedCurrentValueMap.size(), coinsCurrentValueMap.size());
+        assertTrue(coinsCurrentValueMap.keySet().containsAll(coinShortNameList));
+        assertEquals(expectedCurrentValueMap.get("ABC"), coinsCurrentValueMap.get("ABC"));
+        assertEquals(expectedCurrentValueMap.get("DEF"), coinsCurrentValueMap.get("DEF"));
+    }
+
+    /**
+     * Tests that we can retrieve the historical price of a coin.
+     */
+    @Test
+    public void getCoinsHistoricalValue() {
+
+        // Arrange
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0,0), ZoneId.of("UTC"));
+        when(this.exchangeApiHelper.getCoinHistoricalValue(anyString(), anyString(), any(ZonedDateTime.class))).thenReturn(BigDecimal.valueOf(0.567));
+        MarketApiManager marketApiManager = new MarketApiManager(this.exchangeApiHelper);
+
+        // Act
+        BigDecimal coinCurrentValue = marketApiManager.getCoinHistoricalValue("ABC", zonedDateTime);
+
+        // Assert
+        assertNotNull(coinCurrentValue);
+        assertEquals(BigDecimal.valueOf(0.567), coinCurrentValue);
     }
 
     /**

@@ -52,7 +52,7 @@ public class CryptoCompareMarketApiManagerTest {
     }
 
     /**
-     * Tests that we can retrieve the current values of 3 known coins.
+     * Tests that we can retrieve the current price of 3 known coins.
      */
     @Test
     public void getCoinsCurrentValue() {
