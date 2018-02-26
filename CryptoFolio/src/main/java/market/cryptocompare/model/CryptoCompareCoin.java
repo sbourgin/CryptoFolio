@@ -1,4 +1,4 @@
-package cryptocompare.model;
+package market.cryptocompare.model;
 
 import com.google.gson.annotations.SerializedName;
 

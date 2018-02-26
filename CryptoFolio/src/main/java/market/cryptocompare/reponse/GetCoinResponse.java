@@ -1,7 +1,7 @@
-package cryptocompare.reponse;
+package market.cryptocompare.reponse;
 
 import com.google.gson.annotations.SerializedName;
-import cryptocompare.model.CryptoCompareCoin;
+import market.cryptocompare.model.CryptoCompareCoin;
 
 import java.util.Map;
 

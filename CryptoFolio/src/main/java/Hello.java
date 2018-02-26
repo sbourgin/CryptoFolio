@@ -1,8 +1,8 @@
 import core.ApplicationConfiguration;
-import cryptocompare.CryptoCompareApiHelper;
-import manager.LocalExchangeApiHelper;
-import manager.MarketApiManager;
-import model.Coin;
+import market.cryptocompare.CryptoCompareApiHelper;
+import market.manager.LocalExchangeApiHelper;
+import market.manager.MarketApiManager;
+import market.model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

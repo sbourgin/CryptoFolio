@@ -1,10 +1,10 @@
-package manager;
+package market.manager;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import cryptocompare.reponse.GetCoinResponse;
-import model.Coin;
+import market.cryptocompare.reponse.GetCoinResponse;
+import market.model.Coin;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;

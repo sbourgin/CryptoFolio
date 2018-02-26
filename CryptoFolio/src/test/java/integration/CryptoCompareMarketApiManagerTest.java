@@ -1,8 +1,8 @@
 package integration;
 
-import cryptocompare.CryptoCompareApiHelper;
-import manager.MarketApiManager;
-import model.Coin;
+import market.cryptocompare.CryptoCompareApiHelper;
+import market.manager.MarketApiManager;
+import market.model.Coin;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
-package manager;
+package market.manager;
 
-import model.Coin;
+import market.model.Coin;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;

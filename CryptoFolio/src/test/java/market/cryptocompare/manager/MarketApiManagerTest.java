@@ -1,8 +1,8 @@
-package cryptocompare.manager;
+package market.cryptocompare.manager;
 
-import manager.IExchangeApiHelper;
-import manager.MarketApiManager;
-import model.Coin;
+import market.manager.IExchangeApiHelper;
+import market.manager.MarketApiManager;
+import market.model.Coin;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

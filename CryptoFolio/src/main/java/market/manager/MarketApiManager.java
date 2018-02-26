@@ -1,8 +1,8 @@
-package manager;
+package market.manager;
 
 import core.ApplicationConfiguration;
 import com.google.common.base.Preconditions;
-import model.Coin;
+import market.model.Coin;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
 

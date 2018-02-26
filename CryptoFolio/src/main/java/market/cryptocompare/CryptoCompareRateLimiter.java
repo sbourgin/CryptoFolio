@@ -1,4 +1,4 @@
-package cryptocompare;
+package market.cryptocompare;
 
 import com.google.common.util.concurrent.RateLimiter;
 

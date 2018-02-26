@@ -1,17 +1,17 @@
-package cryptocompare;
+package market.cryptocompare;
 
 import core.PreconditionsValidation;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
-import cryptocompare.request.PriceHistoricalRequest;
-import cryptocompare.request.PriceRequest;
-import manager.IExchangeApiHelper;
-import model.Coin;
+import market.cryptocompare.request.PriceHistoricalRequest;
+import market.cryptocompare.request.PriceRequest;
+import market.manager.IExchangeApiHelper;
+import market.model.Coin;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Request;
-import cryptocompare.reponse.GetCoinResponse;
+import market.cryptocompare.reponse.GetCoinResponse;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

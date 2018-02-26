@@ -1,8 +1,8 @@
-package model;
+package market.model;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import cryptocompare.model.CryptoCompareCoin;
+import market.cryptocompare.model.CryptoCompareCoin;
 
 /**
  * Created by sylvain on 1/28/18.

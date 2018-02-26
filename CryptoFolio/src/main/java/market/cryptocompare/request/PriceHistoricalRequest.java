@@ -1,4 +1,4 @@
-package cryptocompare.request;
+package market.cryptocompare.request;
 
 import core.PreconditionsValidation;
 import org.apache.http.NameValuePair;
