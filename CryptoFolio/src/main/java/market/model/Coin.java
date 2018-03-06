@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import market.cryptocompare.model.CryptoCompareCoin;
 
 /**
- * Created by sylvain on 1/28/18.
+ * The coin's generic model.
  */
 public class Coin {
 

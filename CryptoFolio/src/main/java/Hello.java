@@ -1,11 +1,18 @@
 import core.ApplicationConfiguration;
+import data.ManageEmployee;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
 import market.model.Coin;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.Console;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -25,17 +32,50 @@ public class Hello {
      */
     private static Logger logger = LoggerFactory.getLogger(Hello.class);
 
+
     /**
      * Application entry point method.
      * @param args Arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
 
         // Log application start
         logger.info("Application starts");
 
         // Log whether we are in demo mode
         logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
+
+        System.out.println("Choose which action to do: ");
+        System.out.println("{0} Fetch the coin price periodically");
+
+        System.out.println("{1} Refresh the coin stored in the database");
+        System.out.println("{2} Save in the database the historical price for a given coin");
+
+
+// TODO        http://www.baeldung.com/simplifying-the-data-access-layer-with-spring-and-java-generics
+// or (easier?) http://www.baeldung.com/persistence-layer-with-spring-and-hibernate
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int actionSelected;
+        try{
+            actionSelected  = Integer.parseInt(br.readLine());
+        }catch(IOException ioe) {
+            System.err.println("IO Exception!");
+            return;
+        }
+        catch(NumberFormatException nfe) {
+            System.err.println("Invalid Format!");
+            return;
+        }
+
+        switch (actionSelected) {
+            case 0:
+
+            case 1:
+                refreshCoinsInDatabase();
+            case 2:
+                System.out.println("Great");
+        }
 
         // Create the market api manager
         MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
@@ -59,5 +99,34 @@ public class Hello {
 
         // Log application end
         logger.info("Application stops");
+
+
+
     }
+
+
+    // TODO move me elsewhere - different project?
+    private static void refreshCoinsInDatabase () {
+
+        // Create the market api manager
+        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
+
+        // Get the list of coins
+        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+
+        for (Coin coin : coinMap.values()) {
+
+            // Check if the coin exists in the database
+
+            // If yes -> Update properties
+
+            // If no -> Create it
+
+        }
+
+        // Count how many coins are stored in the database and print it
+    }
+
+
+
 }
