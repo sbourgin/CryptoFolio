@@ -1,5 +1,6 @@
 import core.ApplicationConfiguration;
 import data.ManageEmployee;
+import data.access.CoinDAO;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
@@ -21,6 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by sylvain on 12/28/17.
@@ -44,6 +46,31 @@ public class Hello {
 
         // Log whether we are in demo mode
         logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
+
+        Random randomGenerator = new Random();
+        int randomInt = randomGenerator.nextInt(10000);
+
+        data.model.Coin coin = new data.model.Coin();
+        coin.setShortName("ABC" + randomInt);
+        coin.setCoinName("Stealite" + randomInt);
+
+        CoinDAO coinDAO = new CoinDAO();
+        coinDAO.save(coin);
+
+
+        List<data.model.Coin> allCoins = coinDAO.findAll();
+
+
+        coin.setShortName("DEF" + randomInt);
+
+        coinDAO.update(coin);
+
+        coinDAO.delete(coin);
+
+  //      coinDAO.deleteById(coin.getId());
+
+        data.model.Coin coin10 = coinDAO.findById(10);
+
 
         System.out.println("Choose which action to do: ");
         System.out.println("{0} Fetch the coin price periodically");

@@ -10,8 +10,12 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.username">cryptofolio</property>
         <property name="hibernate.connection.password">ffDdU0oMjH1C9EIg</property>
+
+        <property name="hibernate.current_session_context_class">thread</property>
+
         <mapping class="data.model.Employee"/>
         <mapping class="data.model.Coin"/>
         <mapping class="data.model.CoinPrice"/>
+
     </session-factory>
 </hibernate-configuration>
