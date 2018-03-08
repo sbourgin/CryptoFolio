@@ -14,6 +14,19 @@ public class Coin implements Serializable {
     private static final long serialVersionUID = -2009141494713526598L;
 
     /**
+     * Default constructor.
+     */
+    public Coin () { }
+
+    public Coin (market.model.Coin coin) {
+        this.setShortName(coin.shortName);
+        this.setCoinName(coin.coinName);
+        this.setExternalId(coin.id);
+        this.setImageUrl(coin.imageUrl);
+        this.setUrl(coin.url);
+    }
+
+    /**
      * Database identifier of the record.
      */
     @Id

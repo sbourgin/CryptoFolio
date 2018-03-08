@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Created by sylvain on 12/28/17. 
+ * Created by sylvain on 12/28/17.
  */
 public class Hello {
 
@@ -44,46 +44,15 @@ public class Hello {
         // Log whether we are in demo mode
         logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
 
-        Random randomGenerator = new Random();
-        int randomInt = randomGenerator.nextInt(10000);
 
-        data.model.Coin coin = new data.model.Coin();
-        coin.setShortName("ABC" + randomInt);
-        coin.setCoinName("Stealite" + randomInt);
-
-        CoinDAO coinDAO = new CoinDAO();
-        coinDAO.create(coin);
-
-
-        List<data.model.Coin> allCoins = coinDAO.findAll();
-
-
-        coin.setShortName("DEF" + randomInt);
-
-        coinDAO.update(coin);
-
-        coinDAO.delete(coin);
-
-  //      coinDAO.deleteById(coin.getId());
-
-        data.model.Coin coin10 = coinDAO.findById(10);
-
-        data.model.Coin coin34567890 = coinDAO.findById(34567890);
-
-
-        CoinPriceDAO coinPriceDAO = new CoinPriceDAO();
-        List<data.model.CoinPrice> allCoinPrices = coinPriceDAO.findAll();
-
-
+        // TODO replace me with periodic tasks that are customisable with REST
         System.out.println("Choose which action to do: ");
-        System.out.println("{0} Fetch the coin price periodically");
+
+        System.out.println("{0} Fetch coin prices periodically");
 
         System.out.println("{1} Refresh the coin stored in the database");
+
         System.out.println("{2} Save in the database the historical price for a given coin");
-
-
-// TODO        http://www.baeldung.com/simplifying-the-data-access-layer-with-spring-and-java-generics
-// or (easier?) http://www.baeldung.com/persistence-layer-with-spring-and-hibernate
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int actionSelected;
@@ -101,10 +70,14 @@ public class Hello {
         switch (actionSelected) {
             case 0:
 
+                break;
+
             case 1:
                 refreshCoinsInDatabase();
+                break;
             case 2:
                 System.out.println("Great");
+                break;
         }
 
         // Create the market api manager
@@ -130,8 +103,6 @@ public class Hello {
         // Log application end
         logger.info("Application stops");
 
-
-
     }
 
 
@@ -144,13 +115,29 @@ public class Hello {
         // Get the list of coins
         Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
 
+        // Create the coin DAO
+        CoinDAO coinDAO = new CoinDAO();
+
+        // For each coin fetched from the API create or update the coin in the database
         for (Coin coin : coinMap.values()) {
 
             // Check if the coin exists in the database
-
-            // If yes -> Update properties
+            data.model.Coin coinFromDB = coinDAO.findByShortName(coin.shortName);
 
             // If no -> Create it
+            if (coinFromDB == null) {
+                coinFromDB =  new data.model.Coin(coin);
+                coinDAO.create(coinFromDB);
+            }
+            else {
+                // If yes -> Update properties
+                int id = coinFromDB.getId();
+                coinFromDB = new data.model.Coin(coin);
+                coinFromDB.setId(id);
+                coinDAO.update(coinFromDB);
+            }
+
+
 
         }
 

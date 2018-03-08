@@ -13,7 +13,6 @@
 
         <property name="hibernate.current_session_context_class">thread</property>
 
-        <mapping class="data.model.Employee"/>
         <mapping class="data.model.Coin"/>
         <mapping class="data.model.CoinPrice"/>
 

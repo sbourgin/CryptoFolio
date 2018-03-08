@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
+import market.cryptocompare.model.CryptoCompareCoin;
 import market.cryptocompare.request.PriceHistoricalRequest;
 import market.cryptocompare.request.PriceRequest;
 import market.manager.IExchangeApiHelper;
@@ -81,8 +82,20 @@ public class CryptoCompareApiHelper implements IExchangeApiHelper {
         if (getCoinResponse.coinMap == null)
             return coinMap;
 
-        // Convert the CryptoCompareCoin to Coin and return the expected map
-        getCoinResponse.coinMap.forEach((k,v) -> coinMap.put(k, new Coin(v)));
+        // Convert the CryptoCompareCoin to Coin
+        getCoinResponse.coinMap.forEach((String k, CryptoCompareCoin v) -> {
+
+            // Add the base image url
+            if (v.imageUrl != null && !v.imageUrl.isEmpty())
+                v.imageUrl = getCoinResponse.baseImageUrl + v.imageUrl;
+
+            // Add the base url
+            if (v.url != null && !v.url.isEmpty())
+                v.url = getCoinResponse.baseLinkUrl + v.url;
+
+            // Add the coin to the map
+            coinMap.put(k, new Coin(v));
+        });
         return coinMap;
     }
 
