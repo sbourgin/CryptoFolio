@@ -1,6 +1,7 @@
 import core.ApplicationConfiguration;
 import data.ManageEmployee;
 import data.access.CoinDAO;
+import data.access.CoinPriceDAO;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
@@ -70,6 +71,12 @@ public class Hello {
   //      coinDAO.deleteById(coin.getId());
 
         data.model.Coin coin10 = coinDAO.findById(10);
+
+        data.model.Coin coin34567890 = coinDAO.findById(34567890);
+
+
+        CoinPriceDAO coinPriceDAO = new CoinPriceDAO();
+        List<data.model.CoinPrice> allCoinPrices = coinPriceDAO.findAll();
 
 
         System.out.println("Choose which action to do: ");
