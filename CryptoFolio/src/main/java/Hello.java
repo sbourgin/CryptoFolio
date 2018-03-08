@@ -1,18 +1,14 @@
 import core.ApplicationConfiguration;
-import data.ManageEmployee;
 import data.access.CoinDAO;
 import data.access.CoinPriceDAO;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
 import market.model.Coin;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -26,7 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Created by sylvain on 12/28/17.
+ * Created by sylvain on 12/28/17. 
  */
 public class Hello {
 
@@ -56,7 +52,7 @@ public class Hello {
         coin.setCoinName("Stealite" + randomInt);
 
         CoinDAO coinDAO = new CoinDAO();
-        coinDAO.save(coin);
+        coinDAO.create(coin);
 
 
         List<data.model.Coin> allCoins = coinDAO.findAll();

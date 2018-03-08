@@ -1,18 +1,14 @@
 package data.access;
 
 import com.google.common.base.Preconditions;
-import core.PreconditionsValidation;
 import data.DatabaseSessionFactory;
-import data.model.Employee;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 /**

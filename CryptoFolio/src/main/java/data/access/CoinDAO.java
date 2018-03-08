@@ -3,10 +3,13 @@ package data.access;
 import data.model.Coin;
 
 /**
- * Created by sylvain on 3/5/18.
+ * The coin's DAO.
  */
 public class CoinDAO extends AHibernateDAO<Coin> {
 
+    /**
+     * Constructor.
+     */
     public CoinDAO() {
         super(Coin.class);
     }
