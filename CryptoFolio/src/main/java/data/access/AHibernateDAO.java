@@ -5,9 +5,13 @@ import data.DatabaseSessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 
@@ -104,6 +108,52 @@ public abstract class AHibernateDAO <T extends Serializable> {
             session.close();
         }
         return entityList;
+    }
+
+    /**
+     * Finds one entity with a match on a property.
+     * @param propertyName The name of the property to match
+     * @param value The value of the property desired
+     * @return The entity if found, null otherwise
+     */
+    public T findOneByProperty(String propertyName, Object value) {
+
+        // Open the session
+        Session session = DatabaseSessionFactory.getInstance().openSession();
+        Transaction tx = null;
+        T entity = null;
+
+        // Try to retrieve the entity
+        try {
+            tx = session.beginTransaction();
+
+            // Get Criteria Builder
+            CriteriaBuilder criteriaBuilder =  session.getCriteriaBuilder();
+
+            // Create the Query
+            CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.clazz);
+            Root<T> rootT = criteriaQuery.from(this.clazz);
+            criteriaQuery.select(rootT);
+            criteriaQuery.where(criteriaBuilder.equal(rootT.get(propertyName), value));
+
+            // Retrieve the entity
+            entity = session.createQuery(criteriaQuery).getSingleResult();
+            tx.commit();
+
+        // Catch the hibernate exception and try to rollback the transaction
+        } catch (HibernateException e) {
+
+            // Log the exception
+            logger.warn("Exception occurred while finding one entity by property", e);
+
+            // Rollback the transaction if possible
+            if (tx!=null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return entity;
     }
 
     /**
