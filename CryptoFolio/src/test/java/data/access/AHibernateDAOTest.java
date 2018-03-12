@@ -93,13 +93,13 @@ public class AHibernateDAOTest {
 
     @Test
     public void create() throws Exception {
-/*
+
         Coin coin = new Coin();
         coin.setExternalId(12);
         coin.setUrl("Pliiif");
 
         CoinDAO coinDAO = new CoinDAO();
-        coinDAO.create(coin); */
+        coinDAO.create(coin);
 
     }
 
