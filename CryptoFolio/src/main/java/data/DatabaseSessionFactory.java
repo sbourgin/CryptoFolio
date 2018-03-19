@@ -15,7 +15,7 @@ public class DatabaseSessionFactory {
     private static volatile SessionFactory instance = null;
 
     /***
-     * The application logger.
+     * The class logger.
      */
     private static Logger logger = LoggerFactory.getLogger(DatabaseSessionFactory.class);
 

@@ -5,12 +5,14 @@ import data.DatabaseSessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
@@ -137,7 +139,7 @@ public abstract class AHibernateDAO <T extends Serializable> {
             criteriaQuery.where(criteriaBuilder.equal(rootT.get(propertyName), value));
 
             // Retrieve the entity
-            entity = session.createQuery(criteriaQuery).getSingleResult();
+            entity = session.createQuery(criteriaQuery).uniqueResult();
             tx.commit();
 
         // Catch the hibernate exception and try to rollback the transaction
@@ -262,5 +264,46 @@ public abstract class AHibernateDAO <T extends Serializable> {
 
         // Delete the entity
         this.delete(entity);
+    }
+
+    /**
+     * Counts the number of rows in the database for the entity.
+     * @return The number of rows in the database.
+     */
+    public Long countRowInDatabase() {
+
+        // Open the session
+        Session session = DatabaseSessionFactory.getInstance().openSession();
+        Transaction tx = null;
+        Long result = Long.valueOf(-1);
+
+        // Try to retrieve the entities
+        try {
+            tx = session.beginTransaction();
+
+            // Get Criteria Builder
+            CriteriaBuilder criteriaBuilder =  session.getCriteriaBuilder();
+
+            // Create the Query
+            CriteriaQuery<Long> criteriaQueryCount = criteriaBuilder.createQuery(Long.class);
+            Root<T> entityRoot = criteriaQueryCount.from(this.clazz);
+            criteriaQueryCount.select(criteriaBuilder.count(entityRoot));
+            result = session.createQuery(criteriaQueryCount).uniqueResult();
+            tx.commit();
+
+            // Catch the hibernate exception and try to rollback the transaction
+        } catch (HibernateException e) {
+
+            // Log the exception
+            logger.warn("Exception occurred while counting all entities", e);
+
+            // Rollback the transaction if possible
+            if (tx!=null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return result;
     }
 }

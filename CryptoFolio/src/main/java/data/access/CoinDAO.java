@@ -30,38 +30,6 @@ public class CoinDAO extends AHibernateDAO<Coin> {
     }
 
     public Coin findByShortName(String shortName) {
-
-
-        // Open the session
-        Session session = DatabaseSessionFactory.getInstance().openSession();
-        Transaction tx = null;
-        Coin entity = null;
-
-        // Try to retrieve the entity
-        try {
-            tx = session.beginTransaction();
-
-            // Add restriction.
-            Criteria cr = session.createCriteria(Coin.class);
-            cr.add(Restrictions.eq("shortName", shortName));
-            entity = (Coin) cr.uniqueResult();
-            tx.commit();
-
-            // Catch the hibernate exception and try to rollback the transaction
-        } catch (HibernateException e) {
-
-            // Log the exception
-            logger.warn("Exception occurred while finding an entity by its ID", e);
-
-            // Rollback the transaction if possible
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            session.close();
-        }
-        return entity;
-
-
+        return super.findOneByProperty("shortName", shortName);
     }
 }

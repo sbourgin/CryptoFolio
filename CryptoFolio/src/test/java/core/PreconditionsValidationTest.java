@@ -17,7 +17,7 @@ public class PreconditionsValidationTest {
         // Arrange
         String input = "abcd";
 
-        // Act
+        // Act && Assert
         PreconditionsValidation.checkStringNotEmpty(input);
     }
 

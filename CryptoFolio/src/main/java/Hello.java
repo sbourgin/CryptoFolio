@@ -1,3 +1,5 @@
+import com.google.common.util.concurrent.Service;
+import com.google.common.util.concurrent.ServiceManager;
 import core.ApplicationConfiguration;
 import data.access.CoinDAO;
 import data.access.CoinPriceDAO;
@@ -7,6 +9,7 @@ import market.manager.MarketApiManager;
 import market.model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tasks.FetchCoinTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,9 +47,17 @@ public class Hello {
         // Log whether we are in demo mode
         logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
 
+        // Start recurring tasks
+        List<Service> serviceList = new ArrayList<Service>();
+        serviceList.add(new FetchCoinTask());
+        ServiceManager serviceManager = new ServiceManager(serviceList);
+        serviceManager.startAsync();
 
-        // TODO replace me with periodic tasks that are customisable with REST
-        System.out.println("Choose which action to do: ");
+
+
+        // TODO coin price 1-n relationship
+
+      /*  System.out.println("Choose which action to do: ");
 
         System.out.println("{0} Fetch coin prices periodically");
 
@@ -103,46 +114,10 @@ public class Hello {
         // Log application end
         logger.info("Application stops");
 
+
+*/
     }
 
-
-    // TODO move me elsewhere - different project?
-    private static void refreshCoinsInDatabase () {
-
-        // Create the market api manager
-        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
-
-        // Get the list of coins
-        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
-
-        // Create the coin DAO
-        CoinDAO coinDAO = new CoinDAO();
-
-        // For each coin fetched from the API create or update the coin in the database
-        for (Coin coin : coinMap.values()) {
-
-            // Check if the coin exists in the database
-            data.model.Coin coinFromDB = coinDAO.findByShortName(coin.shortName);
-
-            // If no -> Create it
-            if (coinFromDB == null) {
-                coinFromDB =  new data.model.Coin(coin);
-                coinDAO.create(coinFromDB);
-            }
-            else {
-                // If yes -> Update properties
-                int id = coinFromDB.getId();
-                coinFromDB = new data.model.Coin(coin);
-                coinFromDB.setId(id);
-                coinDAO.update(coinFromDB);
-            }
-
-
-
-        }
-
-        // Count how many coins are stored in the database and print it
-    }
 
 
 
