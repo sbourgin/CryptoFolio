@@ -37,5 +37,5 @@ CREATE TABLE IF NOT EXISTS `COINPRICE`
 ;
 
 create index coinId
-  on CoinPrice (coin_id)
+  on COINPRICE (coin_id)
 ;
