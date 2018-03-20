@@ -4,11 +4,14 @@ import com.google.common.base.Objects;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents the coin's in the database.
  */
 @Entity
+@Table(name = "COIN")
 public class Coin implements Serializable {
 
     private static final long serialVersionUID = -2009141494713526598L;
@@ -30,7 +33,7 @@ public class Coin implements Serializable {
      * Database identifier of the record.
      */
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "coin_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
@@ -39,6 +42,19 @@ public class Coin implements Serializable {
         this.id = id;
     }
     private int id;
+
+    /**
+     * The coin prices associated with this coin.
+     * @return Set of coin prices associated with the coin.
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="coin", cascade = CascadeType.ALL)
+    public Set<CoinPrice> getCoinPrices() {
+        return this.coinPrices;
+    }
+    public void setCoinPrices(Set<CoinPrice> coinPrices) {
+        this.coinPrices = coinPrices;
+    }
+    private Set<CoinPrice> coinPrices;
 
     /**
      * The Id of the coin in an external system.

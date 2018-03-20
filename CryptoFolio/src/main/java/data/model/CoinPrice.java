@@ -11,6 +11,7 @@ import java.sql.Timestamp;
  * Represents the coin's price in the database.
  */
 @Entity
+@Table(name = "COINPRICE")
 public class CoinPrice implements Serializable {
 
     private static final long serialVersionUID = -1092133205944542753L;
@@ -19,7 +20,7 @@ public class CoinPrice implements Serializable {
      * Database identifier of the record.
      */
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "coinprice_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
@@ -29,11 +30,19 @@ public class CoinPrice implements Serializable {
     }
     private int id;
 
-    @Basic
-    @Column(name = "coinId", nullable = true)
-    public Integer getCoinId() { return coinId; }
-    public void setCoinId(Integer coinId) { this.coinId = coinId; }
-    private Integer coinId;
+    /**
+     * The coin associated with this price.
+     * @return The coin entity.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="coin_id")
+    public Coin getCoin() {
+        return this.coin;
+    }
+    public void setCoin(Coin coin) {
+        this.coin = coin;
+    }
+    private Coin coin;
 
     /**
      * The price of the coin (in USD).
