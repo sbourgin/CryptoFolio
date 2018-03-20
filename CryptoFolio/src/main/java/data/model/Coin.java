@@ -11,7 +11,7 @@ import java.util.Set;
  * Represents the coin's in the database.
  */
 @Entity
-@Table(name = "COIN")
+@Table(name = "Coin")
 public class Coin implements Serializable {
 
     private static final long serialVersionUID = -2009141494713526598L;

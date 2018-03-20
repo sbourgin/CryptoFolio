@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `Coin`
 )
 ;
 
-CREATE TABLE IF NOT EXISTS `COINPRICE`
+CREATE TABLE IF NOT EXISTS `CoinPrice`
 (
   coinprice_id int auto_increment
     primary key,
@@ -37,5 +37,5 @@ CREATE TABLE IF NOT EXISTS `COINPRICE`
 ;
 
 create index coinId
-  on COINPRICE (coin_id)
+  on CoinPrice (coin_id)
 ;

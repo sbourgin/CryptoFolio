@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Represents the coin's price in the database.
  */
 @Entity
-@Table(name = "COINPRICE")
+@Table(name = "CoinPrice")
 public class CoinPrice implements Serializable {
 
     private static final long serialVersionUID = -1092133205944542753L;
