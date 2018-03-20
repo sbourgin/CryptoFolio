@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `Coin`
 )
 ;
 
-CREATE TABLE IF NOT EXISTS `CoinPrice`
+CREATE TABLE IF NOT EXISTS `COINPRICE`
 (
   coinprice_id int auto_increment
     primary key,
