@@ -9,10 +9,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.net.SocketTimeoutException;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +115,7 @@ public class MarketApiManagerTest {
     public void getCoinsHistoricalValue() {
 
         // Arrange
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0,0), ZoneId.of("UTC"));
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0,0), ZoneOffset.UTC);
         when(this.exchangeApiHelper.getCoinHistoricalValue(anyString(), anyString(), any(ZonedDateTime.class))).thenReturn(BigDecimal.valueOf(0.567));
         MarketApiManager marketApiManager = new MarketApiManager(this.exchangeApiHelper);
 

@@ -10,6 +10,7 @@ import market.model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tasks.FetchCoinTask;
+import tasks.FetchHistoricalCoinPriceTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,15 +48,23 @@ public class Hello {
         // Log whether we are in demo mode
         logger.info("Application mode: {}", (ApplicationConfiguration.IS_DEMO_MODE) ? "DEMO" : "Production");
 
+        // Create the market api manager
+        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
+
+
+        // TODO add is tracked to coin for current prices?
+
+        CoinDAO coinDAO = new CoinDAO();
+
         // Start recurring tasks
         List<Service> serviceList = new ArrayList<Service>();
-        serviceList.add(new FetchCoinTask());
+        serviceList.add(new FetchCoinTask(marketApiManager));
+
+        serviceList.add(new FetchHistoricalCoinPriceTask(marketApiManager, coinDAO.findByShortName("BTC"), true));
+
         ServiceManager serviceManager = new ServiceManager(serviceList);
         serviceManager.startAsync();
 
-
-
-        // TODO coin price 1-n relationship
 
       /*  System.out.println("Choose which action to do: ");
 
@@ -91,8 +100,6 @@ public class Hello {
                 break;
         }
 
-        // Create the market api manager
-        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
 
         // Get the list of coins
         Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
@@ -117,8 +124,4 @@ public class Hello {
 
 */
     }
-
-
-
-
 }

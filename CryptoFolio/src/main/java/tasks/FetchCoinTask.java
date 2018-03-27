@@ -1,5 +1,6 @@
 package tasks;
 
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractScheduledService;
 import core.ApplicationConfiguration;
 import data.DatabaseSessionFactory;
@@ -25,6 +26,24 @@ public class FetchCoinTask extends AbstractScheduledService {
     private static Logger logger = LoggerFactory.getLogger(FetchCoinTask.class);
 
     /**
+     * The market api manager.
+     */
+    private MarketApiManager marketApiManager;
+
+    /**
+     * Constructor.
+     * @param marketApiManager The market API manager.
+     */
+    public FetchCoinTask(MarketApiManager marketApiManager){
+
+        // Validate preconditions
+        Preconditions.checkNotNull(marketApiManager);
+
+        // Set member
+        this.marketApiManager = marketApiManager;
+    }
+
+    /**
      * Executes the task.
      * Updates or creates all coins in the database.
      * If a coin already exists, then its properties are refreshed.
@@ -33,11 +52,8 @@ public class FetchCoinTask extends AbstractScheduledService {
     protected void runOneIteration() {
         logger.info("Start executing FetchCoinTask");
 
-        // Create the market api manager
-        MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
-
         // Get the list of coins
-        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
+        Map<String, Coin> coinMap = this.marketApiManager.getCoinDictionary();
 
         // Create the coin DAO
         CoinDAO coinDAO = new CoinDAO();
@@ -48,13 +64,13 @@ public class FetchCoinTask extends AbstractScheduledService {
             // Check if the coin exists in the database
             data.model.Coin coinFromDB = coinDAO.findOneByProperty("externalId", coin.id);
 
-            // If no -> Create it
+            // If the coin doesn't exist then create it
             if (coinFromDB == null) {
                 coinFromDB =  new data.model.Coin(coin);
                 coinDAO.create(coinFromDB);
             }
+            // If the coin already exists then updates its property (coin can be renamed for instance)
             else {
-                // If yes -> Update properties
                 int id = coinFromDB.getId();
                 coinFromDB = new data.model.Coin(coin);
                 coinFromDB.setId(id);
@@ -67,15 +83,12 @@ public class FetchCoinTask extends AbstractScheduledService {
         logger.info("End FetchCoinTask");
     }
 
+    /**
+     * Runs the tasks every day.
+     * @return The task's schedule.
+     */
     @Override
     protected Scheduler scheduler() {
         return Scheduler.newFixedRateSchedule(0, 1, TimeUnit.DAYS);
     }
-
-    @Override
-    protected void startUp() { }
-
-
-    @Override
-    protected void shutDown() { }
 }
