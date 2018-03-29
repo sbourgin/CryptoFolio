@@ -2,28 +2,16 @@ import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.ServiceManager;
 import core.ApplicationConfiguration;
 import data.access.CoinDAO;
-import data.access.CoinPriceDAO;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
-import market.model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tasks.FetchCoinTask;
 import tasks.FetchHistoricalCoinPriceTask;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by sylvain on 12/28/17.
@@ -34,7 +22,6 @@ public class Hello {
      * The logger.
      */
     private static Logger logger = LoggerFactory.getLogger(Hello.class);
-
 
     /**
      * Application entry point method.

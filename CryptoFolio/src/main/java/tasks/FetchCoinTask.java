@@ -2,11 +2,7 @@ package tasks;
 
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractScheduledService;
-import core.ApplicationConfiguration;
-import data.DatabaseSessionFactory;
 import data.access.CoinDAO;
-import market.cryptocompare.CryptoCompareApiHelper;
-import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
 import market.model.Coin;
 import org.slf4j.Logger;
@@ -47,9 +43,11 @@ public class FetchCoinTask extends AbstractScheduledService {
      * Executes the task.
      * Updates or creates all coins in the database.
      * If a coin already exists, then its properties are refreshed.
+     * @remark: If any invocation of this method throws an exception, the service will transition to the FAILED state and this method will no
+     * longer be called.
      */
     @Override
-    protected void runOneIteration() {
+    protected void runOneIteration()  throws Exception {
         logger.info("Start executing FetchCoinTask");
 
         // Get the list of coins
@@ -90,5 +88,13 @@ public class FetchCoinTask extends AbstractScheduledService {
     @Override
     protected Scheduler scheduler() {
         return Scheduler.newFixedRateSchedule(0, 1, TimeUnit.DAYS);
+    }
+
+    /**
+     * Shut down the task due to an interruption.
+     * @throws Exception
+     */
+    protected void shutDown() throws Exception {
+        logger.error("FetchCoinTask has been requested to shutdown");
     }
 }
