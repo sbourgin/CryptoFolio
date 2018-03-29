@@ -1,13 +1,14 @@
-package integration.tasks;
+package tasks;
 
 import data.access.CoinDAO;
+import data.access.CoinPriceDAO;
 import market.manager.IExchangeApiHelper;
 import market.manager.MarketApiManager;
 import market.model.Coin;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import tasks.FetchCoinTask;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,6 +29,20 @@ public class FetchCoinTaskTest {
     public void setUp() throws Exception {
 
         // Delete the coins that happened to have the same external ID as the ones we will be using during the test
+        CoinDAO coinDAO = new CoinDAO();
+        CoinPriceDAO coinPriceDAO = new CoinPriceDAO();
+        for (Coin coin : this.getHardcodedCoinMap().values()) {
+            data.model.Coin coinInDatabase = coinDAO.findOneByProperty("externalId", coin.id);
+            if (null != coinInDatabase) {
+                coinDAO.delete(coinInDatabase);
+            }
+        }
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+        // Delete the coins created during the tests
         CoinDAO coinDAO = new CoinDAO();
         for (Coin coin : this.getHardcodedCoinMap().values()) {
             data.model.Coin coinInDatabase = coinDAO.findOneByProperty("externalId", coin.id);
