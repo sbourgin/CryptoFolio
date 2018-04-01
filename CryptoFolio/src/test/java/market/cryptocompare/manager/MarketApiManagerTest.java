@@ -115,7 +115,7 @@ public class MarketApiManagerTest {
     public void getCoinsHistoricalValue() {
 
         // Arrange
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0,0), ZoneOffset.UTC);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0,0), ZoneId.of("UTC"));
         when(this.exchangeApiHelper.getCoinHistoricalValue(anyString(), anyString(), any(ZonedDateTime.class))).thenReturn(BigDecimal.valueOf(0.567));
         MarketApiManager marketApiManager = new MarketApiManager(this.exchangeApiHelper);
 
