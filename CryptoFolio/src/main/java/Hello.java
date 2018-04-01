@@ -5,13 +5,22 @@ import data.access.CoinDAO;
 import market.cryptocompare.CryptoCompareApiHelper;
 import market.manager.LocalExchangeApiHelper;
 import market.manager.MarketApiManager;
+import market.model.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tasks.FetchCoinTask;
+import tasks.FetchCurrentCoinsPriceTask;
 import tasks.FetchHistoricalCoinPriceTask;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by sylvain on 12/28/17.
@@ -37,78 +46,34 @@ public class Hello {
 
         // Create the market api manager
         MarketApiManager marketApiManager = new MarketApiManager((ApplicationConfiguration.IS_DEMO_MODE) ? new LocalExchangeApiHelper() : new CryptoCompareApiHelper());
-
-
-        // TODO add is tracked to coin for current prices?
-
         CoinDAO coinDAO = new CoinDAO();
 
+        // Refresh the coins in the database
+        FetchCoinTask fetchCoinTask = new FetchCoinTask(marketApiManager);
+        fetchCoinTask.startAsync();
+        try {
+            fetchCoinTask.wait();
+        } catch (InterruptedException e) {
+            logger.error("Coins cannot be retrieved");
+        }
+
         // Start recurring tasks
+        List<data.model.Coin> coinList = new ArrayList<data.model.Coin>();
+        coinList.add(coinDAO.findByShortName("ETH"));
+        coinList.add(coinDAO.findByShortName("BTC"));
+        coinList.add(coinDAO.findByShortName("ADA"));
+        coinList.add(coinDAO.findByShortName("XRP"));
         List<Service> serviceList = new ArrayList<Service>();
-        serviceList.add(new FetchCoinTask(marketApiManager));
-
-        serviceList.add(new FetchHistoricalCoinPriceTask(marketApiManager, coinDAO.findByShortName("BTC"), true));
-
+        serviceList.add(new FetchCurrentCoinsPriceTask(marketApiManager, coinList));
         ServiceManager serviceManager = new ServiceManager(serviceList);
         serviceManager.startAsync();
-
-
-      /*  System.out.println("Choose which action to do: ");
-
-        System.out.println("{0} Fetch coin prices periodically");
-
-        System.out.println("{1} Refresh the coin stored in the database");
-
-        System.out.println("{2} Save in the database the historical price for a given coin");
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int actionSelected;
-        try{
-            actionSelected  = Integer.parseInt(br.readLine());
-        }catch(IOException ioe) {
-            System.err.println("IO Exception!");
-            return;
+        try {
+            serviceManager.wait();
+        } catch (InterruptedException e) {
+            logger.error(e.getLocalizedMessage());
         }
-        catch(NumberFormatException nfe) {
-            System.err.println("Invalid Format!");
-            return;
-        }
-
-        switch (actionSelected) {
-            case 0:
-
-                break;
-
-            case 1:
-                refreshCoinsInDatabase();
-                break;
-            case 2:
-                System.out.println("Great");
-                break;
-        }
-
-
-        // Get the list of coins
-        Map<String, Coin> coinMap = marketApiManager.getCoinDictionary();
-
-        // Get the current prices
-        List<String> coinShortNameList = new ArrayList<String>();
-        coinShortNameList.add("ETH");
-        coinShortNameList.add("BTC");
-        coinShortNameList.add("ADA");
-        Map<String, BigDecimal> coinsCurrentValueMap = marketApiManager.getCoinsCurrentValue(coinShortNameList);
-
-        // Get historical prices
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2016, Month.JANUARY, 1, 0, 0,0), ZoneId.of("UTC"));
-        BigDecimal btcHistoricalValue = marketApiManager.getCoinHistoricalValue("BTC", zonedDateTime);
-
-        // Print the price
-        System.out.println(new StringBuilder().append("Bitcoin historical price: ").append(btcHistoricalValue).append(" at ").append(zonedDateTime.toString()).toString());
 
         // Log application end
         logger.info("Application stops");
-
-
-*/
     }
 }
