@@ -79,13 +79,9 @@ public class FetchHistoricalCoinPriceTaskTest {
     @Parameters({"ADA, 2017, 10, 01",
                  "BTC, 2010, 07, 18",
                  "ETH, 2015, 08, 7",
-                 "XRP, 2015, 01, 29",
-                 "TEST, 2015, 01, 28"
+                 "XRP, 2015, 01, 29"
     })
     public void findOriginZonedDateTime(String coinShortName, int year, int month, int day) {
-
-        if(coinShortName.equals("TEST"))
-            assertTrue("TEST is working", false); // TODO remove me
 
         // Arrange
         ZonedDateTime expectedResult = ZonedDateTime.of(year, month, day, 0,0,0,0, ZoneId.of("UTC"));
@@ -110,12 +106,14 @@ public class FetchHistoricalCoinPriceTaskTest {
         assertEquals(expectedResult, result);
     }
 
-    
+    /**
+     * Tests the run method.
+     */
     @Test
     public void run() {
 
+        // Arrange
         MarketApiManager marketApiManager = new MarketApiManager(new CryptoCompareApiHelper());
-
         CoinDAO coinDAO = new CoinDAO();
         Coin coin = this.getInitializedCoin("ADA");
         coinDAO.create(coin);
@@ -132,7 +130,7 @@ public class FetchHistoricalCoinPriceTaskTest {
 
         // Assert
         Set<CoinPrice> coinPriceSet = coinDAO.findByShortName("ADA").getCoinPrices(); // force a refresh from the database
-        assertTrue(coinPriceSet.size() > 100);
+        assertTrue(coinPriceSet.size() > 100); // Make sure at least one hundred coin prices where created
     }
 
     /**
