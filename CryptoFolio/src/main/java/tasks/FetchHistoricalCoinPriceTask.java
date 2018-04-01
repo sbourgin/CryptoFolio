@@ -3,6 +3,7 @@ package tasks;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractExecutionThreadService;
 import core.PreconditionsValidation;
+import data.access.CoinDAO;
 import data.access.CoinPriceDAO;
 import data.model.Coin;
 import data.model.CoinPrice;
@@ -35,7 +36,11 @@ public class FetchHistoricalCoinPriceTask extends AbstractExecutionThreadService
      */
     private Coin coin;
 
+    /**
+     * Whether the task should delete the existing coin prices in the database for the given coin.
+     */
     private boolean clearOldData;
+
     /**
      * The market api manager.
      */
@@ -45,6 +50,7 @@ public class FetchHistoricalCoinPriceTask extends AbstractExecutionThreadService
      * Constructor.
      * @param marketApiManager The market api manager.
      * @param coin The coin to lookup.
+     * @param clearOldData Whether the task should delete the existing coin prices in the database for the given coin.
      */
     public FetchHistoricalCoinPriceTask(MarketApiManager marketApiManager, Coin coin, boolean clearOldData){
 
@@ -72,7 +78,7 @@ public class FetchHistoricalCoinPriceTask extends AbstractExecutionThreadService
         if (this.clearOldData)
             this.deleteOldCoinPriceData();
 
-        // First step is to know when we should start fetching the data
+        // First step is to know when we should start fetching the price
         ZonedDateTime currentZoneDateTime = this.findCoinTradingStartDate();
         CoinPriceDAO coinPriceDAO = new CoinPriceDAO();
 
@@ -93,21 +99,28 @@ public class FetchHistoricalCoinPriceTask extends AbstractExecutionThreadService
             coinPrice.setPrice(coinValue);
             coinPrice.setDate(java.sql.Timestamp.from(currentZoneDateTime.toInstant()));
             coinPriceDAO.create(coinPrice);
+
+            // Increment the time to lookup
             currentZoneDateTime = currentZoneDateTime.plusDays(1);
         }
 
         // Count how many coin prices are stored in the database and log it
-        logger.info("CoinPrices in the database: " + coinPriceDAO.countRowInDatabase() + " for the coin: " + this.coin.getShortName());
+        logger.info("CoinPrices in the database: " + new CoinDAO().findById(this.coin.getId()).getCoinPrices().size() + " for the coin: " + this.coin.getShortName());
         logger.info("End FetchCoinTask");
     }
 
     /**
      * Deletes all the CoinPrice entity in the database that are older than yesterday.
      */
-    private void deleteOldCoinPriceData() { // TODO add a test
+    private void deleteOldCoinPriceData() {
 
         // Create the coin price DAO
         CoinPriceDAO coinPriceDAO = new CoinPriceDAO();
+
+        // Return early if there is nothing to delete
+        if(null == this.coin.getCoinPrices()) {
+            return;
+        }
 
         // Delete all the coinPrice older than a day
         for (CoinPrice coinPrice : this.coin.getCoinPrices()) {
@@ -121,25 +134,32 @@ public class FetchHistoricalCoinPriceTask extends AbstractExecutionThreadService
      * Finds the date when the coin started to be traded on exchanges.
      * @return the date when the coin started to be traded on exchanges
      */
-    public ZonedDateTime findCoinTradingStartDate() { // TODO PRIVATE
+    private ZonedDateTime findCoinTradingStartDate() {
 
+        // We will use a bisection method to find the start trade date
+        // We know that all the coins have started to be traded after Bitcoin, that's our low date
         ZonedDateTime lowDateTime = this.bitcoinOriginZonedDateTime;
         ZonedDateTime highDateTime = ZonedDateTime.now(ZoneId.of("UTC"));
 
-        // Check there is a solution
+        // Check there is a solution (i.e: the coin has started to be traded
         if(this.marketApiManager.getCoinHistoricalValue(this.coin.getShortName(), highDateTime).equals(BigDecimal.valueOf(0)))
             return null;
 
-
+        // Find the start date
         while (true) {
 
+            // Compute the number of days between the low and high date
             long daysBetweenHighAndLow = ChronoUnit.DAYS.between(lowDateTime, highDateTime);
+
+            // Return if the two dates are close enough
             if (daysBetweenHighAndLow <= 1)
                 return highDateTime;
 
+            // Get the value of the date between the low and high date
             ZonedDateTime midDateTime = lowDateTime.plusDays(daysBetweenHighAndLow/2);
             BigDecimal midDateCoinValue = this.marketApiManager.getCoinHistoricalValue(this.coin.getShortName(), midDateTime);
 
+            // Increase the low date if the coin started to be traded after the mid date otherwise increase the high date
             if (midDateCoinValue.equals(BigDecimal.valueOf(0.0))) {
                 lowDateTime = midDateTime.plusDays(1);
                 continue;
