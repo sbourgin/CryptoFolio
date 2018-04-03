@@ -48,10 +48,6 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-
-# Intellij
-.idea/
-*.iml
  
 # Mac
 .DS_Store
