@@ -72,7 +72,7 @@ public class CryptoCompareMarketApiManagerTest {
         assertTrue(coinsCurrentValueMap.keySet().containsAll(coinShortNameList));
         assertEquals(-1, BigDecimal.valueOf(5000).compareTo(coinsCurrentValueMap.get("BTC")));
         assertEquals(-1, BigDecimal.valueOf(200).compareTo(coinsCurrentValueMap.get("ETH")));
-        assertEquals(-1, BigDecimal.valueOf(0.20).compareTo(coinsCurrentValueMap.get("ADA")));
+        assertEquals(-1, BigDecimal.valueOf(0.10).compareTo(coinsCurrentValueMap.get("ADA")));
     }
 
     /**
