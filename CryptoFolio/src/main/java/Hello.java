@@ -63,7 +63,7 @@ public class Hello {
         coinList.add(coinDAO.findByShortName("BTC"));
         coinList.add(coinDAO.findByShortName("ADA"));
         coinList.add(coinDAO.findByShortName("XRP"));
-        List<Service> serviceList = new ArrayList<Service>();
+        List<Service> serviceList = new ArrayList<>();
         serviceList.add(new FetchCurrentCoinsPriceTask(marketApiManager, coinList));
         ServiceManager serviceManager = new ServiceManager(serviceList);
         serviceManager.startAsync();

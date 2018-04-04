@@ -1,6 +1,7 @@
 package data.model;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents the coin's in the database.
+ * Represents a coin in the database.
  */
 @Entity
 @Table(name = "Coin")
@@ -19,9 +20,18 @@ public class Coin implements Serializable {
     /**
      * Default constructor.
      */
-    public Coin () { }
+    public Coin() { }
 
+    /**
+     * Constructor
+     * @param coin A coin from the market api.
+     */
     public Coin (market.model.Coin coin) {
+
+        // Validate preconditions
+        Preconditions.checkNotNull(coin);
+
+        // Set member
         this.setShortName(coin.shortName);
         this.setCoinName(coin.coinName);
         this.setExternalId(coin.id);

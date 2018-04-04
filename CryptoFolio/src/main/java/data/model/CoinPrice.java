@@ -8,13 +8,18 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
- * Represents the coin's price in the database.
+ * Represents a coin's price in the database.
  */
 @Entity
 @Table(name = "CoinPrice")
 public class CoinPrice implements Serializable {
 
     private static final long serialVersionUID = -1092133205944542753L;
+
+    /**
+     * Default constructor.
+     */
+    public CoinPrice() { }
 
     /**
      * Database identifier of the record.

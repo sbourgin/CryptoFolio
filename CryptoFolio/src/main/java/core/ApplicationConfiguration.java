@@ -12,7 +12,6 @@ public class ApplicationConfiguration {
 
     /**
      * The default currency of the application.
-     * @remark: Make it customizable?
      */
     public static final String DEFAULT_CURRENCY = "USD";
 }

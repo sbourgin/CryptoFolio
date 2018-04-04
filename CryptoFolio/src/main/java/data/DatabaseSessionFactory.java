@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
  */
 public class DatabaseSessionFactory {
 
+    /**
+     * The session factory instance.
+     */
     private static volatile SessionFactory instance = null;
 
     /***
